@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>光影對決｜菜單頁</title>
+  <style>
+    :root{
+      --bg:#050813;--panel:rgba(10,16,34,.72);--panel2:rgba(11,18,40,.9);--cyan:#71e9ff;--blue:#1a8dff;--gold:#ffd86b;--violet:#a27cff;--text:#edf6ff;--muted:rgba(255,255,255,.72);--line:rgba(255,255,255,.12);
+      --shadow:0 20px 60px rgba(0,0,0,.42);
+      --ok:#73ffb4;--warn:#ffd86b;--bad:#ff8c9e;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;background:
+      radial-gradient(circle at 12% 12%, rgba(26,141,255,.16), transparent 18%),
+      radial-gradient(circle at 82% 10%, rgba(162,124,255,.16), transparent 20%),
+      radial-gradient(circle at 50% 100%, rgba(255,216,107,.08), transparent 28%),
+      linear-gradient(180deg,#081125 0%, #04070f 62%, #02040b 100%);
+      color:var(--text);overflow-x:auto;min-width:1820px}
+    .bg-grid::before{content:"";position:fixed;inset:0;background:
+      linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size:40px 40px;mask-image:radial-gradient(circle at center, #000 35%, transparent 100%);pointer-events:none;opacity:.35}
+    .audio-panel{position:fixed;left:18px;top:18px;width:120px;background:rgba(7,12,26,.82);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px 12px 10px;z-index:30;box-shadow:var(--shadow)}
+    .audio-title{font-size:13px;margin-bottom:8px;color:#fff;font-weight:700}
+    .audio-row{display:grid;grid-template-columns:32px 1fr 34px;gap:8px;align-items:center;margin:6px 0;font-size:12px;color:var(--muted)}
+    input[type="range"]{width:100%}
+
+    .shell{max-width:1960px;margin:18px auto;padding:0 24px 30px 18px;display:grid;grid-template-columns:460px minmax(980px,1fr) 460px;gap:30px;align-items:start;position:relative;left:-12px}
+    .side-panel,.center-shell{background:linear-gradient(180deg, rgba(7,14,32,.82), rgba(4,8,20,.92));border:1px solid rgba(113,233,255,.14);border-radius:28px;box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.03)}
+    .side-panel{padding:30px;min-height:1020px}
+    .center-shell{padding:32px 34px 28px;min-height:1040px}
+    .panel-title{font-size:32px;font-weight:900;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+    .panel-title::before{content:"";width:5px;height:28px;border-radius:999px;background:linear-gradient(180deg,var(--cyan),var(--gold))}
+    .role-chip,.enemy-chip,.slot-chip{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(255,216,107,.08);border:1px solid rgba(255,216,107,.18);font-size:13px;color:var(--gold);font-weight:700}
+    .role-name{font-size:32px;font-weight:900;margin-top:18px}
+    .role-sub{font-size:18px;color:var(--muted);margin-top:10px;line-height:1.85;min-height:74px}
+    .hero-frame{margin:24px 0 22px;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.018));aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative}
+    .hero-frame img{width:100%;height:100%;object-fit:cover;display:block}.hero-frame img.hidden{display:none}.hero-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-size:15px;color:rgba(255,255,255,.55);line-height:1.8}.hero-placeholder.hidden{display:none}
+    .skill-panel{background:rgba(2,7,20,.72);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:20px 20px 22px;margin-top:18px;min-height:188px}
+    .skill-title{font-size:15px;color:#fff;font-weight:800;margin-bottom:10px}
+    .skill-name{font-size:26px;color:var(--gold);font-weight:900;margin-bottom:10px;min-height:34px}
+    .skill-desc{font-size:16px;line-height:1.95;color:rgba(255,255,255,.8);min-height:92px}
+
+    .hero-title{text-align:center;padding:10px 0 22px}
+    .eyebrow{display:inline-flex;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:12px;color:rgba(255,255,255,.62);letter-spacing:2px}
+    .game-title{font-size:102px;line-height:1;font-weight:900;letter-spacing:6px;margin:18px 0 10px;background:linear-gradient(90deg,#f9feff 0%, #7bf0ff 25%, #ffd86b 58%, #a27cff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .subtitle{text-align:center;color:var(--muted);font-size:20px;margin-bottom:24px}
+    .inner-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;align-items:start}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.08);border-radius:28px;padding:22px;min-height:100%;display:flex;flex-direction:column}
+    .small-hint{font-size:16px;color:var(--muted);margin:10px 0 16px}
+    .controls{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;margin:16px 0}
+    .btn,.ghost-btn,.copy-btn,.role-card,.faction-pill{border:none;outline:none;cursor:pointer;transition:.18s ease;font-family:inherit}
+    .btn{height:58px;padding:0 24px;border-radius:17px;background:linear-gradient(90deg,var(--blue),var(--violet));color:#fff;font-weight:800;font-size:16px;box-shadow:0 10px 24px rgba(26,141,255,.2)}
+    .btn:hover{transform:translateY(-1px)}
+    .ghost-btn,.copy-btn{height:58px;padding:0 20px;border-radius:18px;background:rgba(255,255,255,.06);color:#fff;font-weight:700;font-size:15px;border:1px solid rgba(255,255,255,.08)}
+    .ghost-btn:disabled,.btn:disabled,.copy-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .input{width:100%;height:58px;padding:0 20px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:#091122;color:#fff;font-size:16px}
+    .faction-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 18px}
+    .faction-pill{height:58px;border-radius:17px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:16px}
+    .faction-pill.active.light{background:linear-gradient(90deg,#1560a8,#1f8cff);border-color:rgba(113,233,255,.4)}
+    .faction-pill.active.dark{background:linear-gradient(90deg,#2a2d54,#6540ff);border-color:rgba(162,124,255,.4)}
+
+    .role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+    .role-card{padding:12px 10px;border-radius:20px;background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.12);color:#fff;text-align:center;min-height:156px}
+    .role-card.active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.12) inset, 0 0 22px rgba(113,233,255,.14)}
+    .role-thumb{width:92px;height:92px;border-radius:18px;overflow:hidden;margin:0 auto 8px;border:1px solid rgba(255,255,255,.08)}
+    .role-thumb img{width:100%;height:100%;object-fit:cover}
+    .role-label{font-size:20px;font-weight:900;margin-bottom:4px}
+    .role-mini{font-size:13px;color:var(--muted)}
+
+    .status-title{font-size:24px;font-weight:800;margin-bottom:16px}
+    .status-card{padding:22px 22px 24px}
+    .room-code{display:inline-block;font-size:clamp(34px,3vw,52px);letter-spacing:1px;color:var(--gold);font-weight:900;margin:4px 0 8px;word-break:keep-all;line-height:1.08}
+    .status-sub{font-size:16px;color:var(--muted);margin-bottom:16px}
+    .players-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+    .player-box{min-height:146px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:18px}
+    .player-box .top{font-size:24px;font-weight:900;margin-bottom:10px}
+    .player-box .name{font-size:22px;font-weight:800}
+    .player-box .meta{font-size:15px;color:var(--muted);line-height:1.8}
+    .state{font-weight:800}
+    .state.ok{color:var(--ok)} .state.warn{color:var(--warn)} .state.bad{color:var(--bad)}
+    .status-actions{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    .status-actions .btn,.status-actions .ghost-btn,.status-actions .copy-btn{width:100%;height:60px;font-size:17px;border-radius:18px}
+    .start-row{margin-top:14px}
+    .start-row .ghost-btn,.start-row .btn{width:100%;height:62px;border-radius:18px;font-size:18px;font-weight:900}
+    .ghost-btn.start-ready{background:linear-gradient(90deg,#12a851,#21d07a);border:1px solid rgba(115,255,180,.42);color:#fff;box-shadow:0 12px 26px rgba(18,168,81,.24)}
+    .ghost-btn.start-ready:hover{transform:translateY(-1px)}
+    .info-bar{min-height:64px;border-radius:18px;border:1px solid rgba(113,233,255,.18);background:linear-gradient(90deg, rgba(18,131,231,.22), rgba(162,124,255,.12));display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;margin-top:16px;padding:14px 18px;text-align:center;width:100%}
+    .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);padding:12px 18px;border-radius:14px;background:rgba(7,12,26,.94);border:1px solid rgba(255,255,255,.1);opacity:0;pointer-events:none;transition:.2s ease;z-index:50}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    .guide-overlay,.event-overlay{position:fixed;inset:0;background:rgba(2,6,18,.72);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:28px;z-index:70}
+    .guide-overlay.show,.event-overlay.show{display:flex}
+    .guide-card,.event-card{width:min(860px,94vw);background:linear-gradient(180deg, rgba(10,18,42,.96), rgba(4,9,22,.96));border:1px solid rgba(113,233,255,.2);border-radius:28px;box-shadow:0 30px 90px rgba(0,0,0,.42);padding:30px 30px 24px;position:relative}
+    .guide-kicker,.event-kicker{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;background:rgba(113,233,255,.08);border:1px solid rgba(113,233,255,.16);font-size:13px;font-weight:800;color:var(--cyan);margin-bottom:16px}
+    .guide-heading,.event-heading{font-size:38px;font-weight:900;margin-bottom:12px}
+    .guide-sub,.event-sub{font-size:16px;line-height:1.9;color:rgba(255,255,255,.78);margin-bottom:18px}
+    .guide-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:18px}
+    .guide-step{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:18px 18px 16px}
+    .guide-step .num{font-size:13px;font-weight:900;color:var(--gold);letter-spacing:1px;margin-bottom:8px}
+    .guide-step .title{font-size:22px;font-weight:900;margin-bottom:6px}
+    .guide-step .desc{font-size:15px;line-height:1.85;color:rgba(255,255,255,.74)}
+    .guide-missing,.event-note{min-height:48px;border-radius:16px;border:1px solid rgba(255,216,107,.18);background:rgba(255,216,107,.08);display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 14px;font-size:15px;color:#fff;margin-bottom:14px}
+    .guide-tip,.event-tip{font-size:14px;color:rgba(255,255,255,.58);text-align:center}
+    .guide-actions,.event-actions{display:flex;justify-content:center;margin-top:16px}
+    .guide-close-btn,.event-close-btn{min-width:180px;height:52px;padding:0 22px;border-radius:16px;border:none;cursor:pointer;background:linear-gradient(90deg,var(--blue),var(--violet));color:#fff;font-size:16px;font-weight:900;box-shadow:0 10px 24px rgba(26,141,255,.22)}
+    .guide-close-btn:hover,.event-close-btn:hover{transform:translateY(-1px)}
+    .rule-list{margin:12px 0 0;padding-left:18px;color:rgba(255,255,255,.78);font-size:15px;line-height:1.9}
+    @media (max-width:1700px){body{min-width:0}.shell{grid-template-columns:1fr;max-width:1240px;left:0;padding:0 18px 24px}.side-panel{min-height:auto}.center-shell{min-height:auto}.audio-panel{position:absolute}}
+  </style>
+</head>
+<body class="bg-grid">
+  <div class="audio-panel">
+    <div class="audio-title">音效設定</div>
+    <div class="audio-row"><span>音樂</span><input id="bgmVolume" type="range" min="0" max="100" value="65"><span id="bgmOut">65%</span></div>
+    <div class="audio-row"><span>音效</span><input id="sfxVolume" type="range" min="0" max="100" value="85"><span id="sfxOut">85%</span></div>
+  </div>
+
+  <div class="shell shell-full">
+    <aside class="side-panel">
+      <div class="panel-title">我方資訊</div>
+      <div class="slot-chip" id="mySlotChip">我的陣營：未選</div>
+      <div class="role-name" id="myRoleName">尚未選擇角色</div>
+      <div class="role-sub" id="myRoleSub">請先選擇光 / 暗，再選擇法師、騎士或刺客。</div>
+      <div class="hero-frame"><img id="myRoleImage" class="hidden" src="" alt="我方角色"><div id="myRolePlaceholder" class="hero-placeholder">尚未選擇角色<br>選定法師、騎士或刺客後，這裡才會顯示角色立繪。</div></div>
+      <div class="skill-panel">
+        <div class="skill-title">被動技能</div>
+        <div class="skill-name" id="myPassiveName">—</div>
+        <div class="skill-desc" id="myPassiveDesc">尚未選角。</div>
+      </div>
+      <div class="skill-panel">
+        <div class="skill-title">主動技能</div>
+        <div class="skill-name" id="myActiveName">—</div>
+        <div class="skill-desc" id="myActiveDesc">尚未選角。</div>
+      </div>
+    </aside>
+
+    <section class="center-shell">
+      <div class="hero-title">
+        <div class="eyebrow">LIGHT × SHADOW CYBER ARENA</div>
+        <div class="game-title">光影對決</div>
+        <div class="subtitle">先選陣營，再選角色，完成建房與準備後進入戰鬥。</div>
+      </div>
+      <div class="inner-grid">
+        <div class="card">
+          <div class="panel-title" style="font-size:18px">房間操作</div>
+          <div class="small-hint">玩家名稱：<strong id="playerNameText">未載入</strong></div>
+          <div class="faction-wrap">
+            <button id="factionLight" class="faction-pill light">光 / O</button>
+            <button id="factionDark" class="faction-pill dark">暗 / X</button>
+          </div>
+          <div class="controls">
+            <button id="createBtn" class="btn">建立新房間</button>
+            <button id="copyBtn" class="copy-btn" disabled>複製房號</button>
+          </div>
+          <div class="controls">
+            <input id="roomInput" class="input" placeholder="輸入房號加入房間" maxlength="8">
+            <button id="joinBtn" class="btn">加入房間</button>
+          </div>
+
+          <div class="small-hint">選擇角色</div>
+          <div class="role-grid">
+            <button class="role-card" data-role="mage">
+              <div class="role-thumb"><img src="mage.png" alt="法師"></div>
+              <div class="role-label">法師</div>
+              <div class="role-mini">控場</div>
+            </button>
+            <button class="role-card" data-role="knight">
+              <div class="role-thumb"><img src="knight.png" alt="騎士"></div>
+              <div class="role-label">騎士</div>
+              <div class="role-mini">穩住</div>
+            </button>
+            <button class="role-card" data-role="assassin">
+              <div class="role-thumb"><img src="assassin.png" alt="刺客"></div>
+              <div class="role-label">刺客</div>
+              <div class="role-mini">擾亂</div>
+            </button>
+          </div>
+
+          <div class="skill-panel" style="margin-top:14px">
+            <div class="skill-title">共通戰鬥規則</div>
+            <ul class="rule-list">
+              <li>HP 100、初始 SP 0、SP 上限 5、護盾上限 2 層。</li>
+              <li>任意成功連線 +1 SP；若經過中央格額外 +1 SP。</li>
+              <li>只有「直排成功連線」才會觸發光 / 暗強化。</li>
+              <li>脆弱等無效狀態的棋子不能參與連線判定。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card status-card">
+          <div class="panel-title" style="font-size:18px">目前狀態</div>
+          <div class="status-title">房號：<span class="room-code" id="roomCodeText">未建立</span></div>
+          <div class="status-sub">你的身分：<span id="roomRoleText">尚未加入房間</span></div>
+          <div class="players-grid">
+            <div class="player-box">
+              <div class="top">玩家一</div>
+              <div class="name" id="playerOneName">等待中</div>
+              <div class="meta" id="playerOneMeta">尚未加入</div>
+              <div class="state bad" id="playerOneState">未加入</div>
+            </div>
+            <div class="player-box">
+              <div class="top">玩家二</div>
+              <div class="name" id="playerTwoName">等待中</div>
+              <div class="meta" id="playerTwoMeta">尚未加入</div>
+              <div class="state bad" id="playerTwoState">未加入</div>
+            </div>
+          </div>
+          <div class="status-actions">
+            <button id="readyBtn" class="btn" disabled>準備就緒</button>
+            <button id="leaveBtn" class="ghost-btn" disabled>離開房間</button>
+          </div>
+          <div class="start-row">
+            <button id="startBtn" class="ghost-btn" disabled>房主開始</button>
+          </div>
+          <div id="statusBar" class="info-bar">請先選擇陣營與角色，再建立或加入房間。</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side-panel">
+      <div class="panel-title">敵方資訊</div>
+      <div class="enemy-chip" id="enemySlotChip">對手角色</div>
+      <div class="role-name" id="enemyRoleName">待同步顯示</div>
+      <div class="role-sub" id="enemyRoleSub">對手尚未加入或尚未選角。</div>
+      <div class="hero-frame"><img id="enemyRoleImage" class="hidden" src="" alt="敵方角色"><div id="enemyRolePlaceholder" class="hero-placeholder">對手尚未選角<br>待對手完成選擇後，這裡才會同步顯示角色立繪。</div></div>
+      <div class="skill-panel">
+        <div class="skill-title">被動技能</div>
+        <div class="skill-name" id="enemyPassiveName">—</div>
+        <div class="skill-desc" id="enemyPassiveDesc">等待同步。</div>
+      </div>
+      <div class="skill-panel">
+        <div class="skill-title">主動技能</div>
+        <div class="skill-name" id="enemyActiveName">—</div>
+        <div class="skill-desc" id="enemyActiveDesc">等待同步。</div>
+      </div>
+    </aside>
+  </div>
+
+
+  <div id="guideOverlay" class="guide-overlay show" role="dialog" aria-modal="true" aria-labelledby="guideHeading">
+    <div id="guideCard" class="guide-card">
+      <div class="guide-kicker">操作提示</div>
+      <div id="guideHeading" class="guide-heading">先照順序做，流程才會正常。</div>
+      <div id="guideSub" class="guide-sub">先完成陣營與角色選擇，再建立房間或輸入房號加入，最後按下準備就緒。</div>
+      <div class="guide-steps">
+        <div class="guide-step"><div class="num">STEP 1</div><div class="title">先選陣營</div><div class="desc">先選光或暗。沒有陣營時，系統不會讓你建房或加入房間。</div></div>
+        <div class="guide-step"><div class="num">STEP 2</div><div class="title">再選角色</div><div class="desc">騎士、刺客、法師擇一。選好後，左右角色資訊才會開始顯示。</div></div>
+        <div class="guide-step"><div class="num">STEP 3</div><div class="title">建立或加入房間</div><div class="desc">房主建立房間，另一位玩家輸入房號加入。沒有先選完前置項目，按鍵會被擋下。</div></div>
+        <div class="guide-step"><div class="num">STEP 4</div><div class="title">最後按準備</div><div class="desc">雙方都準備完成後，房主才能按下開始，進入下一階段。</div></div>
+      </div>
+      <div id="guideMissing" class="guide-missing">現在先完成：選擇陣營、選擇角色。</div>
+      <div class="guide-tip">如果你操作順序錯誤，這個提示會再次跳出。</div>
+      <div class="guide-actions"><button id="guideCloseBtn" class="guide-close-btn" type="button">我知道了，關閉提示</button></div>
+    </div>
+  </div>
+
+  <div id="eventOverlay" class="event-overlay" role="dialog" aria-modal="true" aria-labelledby="eventHeading">
+    <div class="event-card">
+      <div class="event-kicker">房間事件</div>
+      <div id="eventHeading" class="event-heading">房間狀態已更新</div>
+      <div id="eventSub" class="event-sub">系統偵測到房間內有玩家離線或房間已失效。</div>
+      <div id="eventNote" class="event-note">請依照提示進行下一步。</div>
+      <div class="event-tip">按下方按鈕後，會回到目前可操作的菜單狀態。</div>
+      <div class="event-actions"><button id="eventCloseBtn" class="event-close-btn" type="button">我知道了</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module" src="menu.js"></script>
+</body>
+</html>

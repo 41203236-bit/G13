@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>光影對決｜進入頁</title>
+  <style>
+    :root{
+      --bg-1:#050812;
+      --bg-2:#0b1224;
+      --bg-3:#1a1034;
+      --line:rgba(255,255,255,.12);
+      --panel:rgba(7,10,24,.62);
+      --panel-strong:rgba(10,14,30,.82);
+      --text:#eef7ff;
+      --muted:rgba(255,255,255,.72);
+      --cyan:#66e4ff;
+      --gold:#ffd76d;
+      --violet:#9a78ff;
+      --danger:#ff8b8b;
+      --ok:#7dffb3;
+      --shadow:0 20px 60px rgba(0,0,0,.45);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 18%, rgba(102,228,255,.12), transparent 20%),
+        radial-gradient(circle at 82% 15%, rgba(154,120,255,.14), transparent 22%),
+        radial-gradient(circle at 72% 80%, rgba(255,215,109,.10), transparent 20%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
+      overflow:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-20%;
+      background:conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(102,228,255,.06) 50deg, transparent 100deg, rgba(255,215,109,.06) 160deg, transparent 220deg, rgba(154,120,255,.07) 310deg, transparent 360deg);
+      filter:blur(56px);
+      animation:spin 22s linear infinite;
+      pointer-events:none;
+      z-index:0;
+    }
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+    .scene{
+      position:relative;
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      z-index:1;
+    }
+    .shell{
+      position:relative;
+      width:min(94vw, 1120px);
+      min-height:min(88vh, 780px);
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      border:1px solid var(--line);
+      border-radius:34px;
+      overflow:hidden;
+      background:linear-gradient(180deg, rgba(8,12,26,.58), rgba(8,12,26,.76));
+      backdrop-filter:blur(18px);
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .shell::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:34px;
+      padding:1px;
+      background:linear-gradient(135deg, rgba(102,228,255,.5), rgba(255,215,109,.28), rgba(154,120,255,.32), rgba(102,228,255,.18));
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+      pointer-events:none;
+    }
+    .hero,
+    .form-wrap{
+      position:relative;
+      padding:42px;
+    }
+    .hero{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)),
+        radial-gradient(circle at 20% 18%, rgba(102,228,255,.12), transparent 28%),
+        radial-gradient(circle at 72% 32%, rgba(154,120,255,.12), transparent 22%),
+        radial-gradient(circle at 52% 78%, rgba(255,215,109,.10), transparent 18%);
+      border-right:1px solid rgba(255,255,255,.08);
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      width:max-content;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      color:rgba(255,255,255,.78);
+      font-size:.92rem;
+      letter-spacing:2px;
+    }
+    .eyebrow::before,.eyebrow::after{
+      content:"";
+      width:16px;height:1px;
+      background:linear-gradient(90deg, transparent, var(--cyan), transparent);
+    }
+    h1{
+      margin:18px 0 12px;
+      font-size:clamp(3rem, 6vw, 5.3rem);
+      line-height:.96;
+      letter-spacing:8px;
+      font-weight:900;
+      background:linear-gradient(90deg, #f3fbff 0%, #76eaff 18%, #ffd76d 40%, #a17bff 72%, #f4fbff 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow:0 0 24px rgba(102,228,255,.18);
+    }
+    .subtitle{
+      max-width:520px;
+      color:var(--muted);
+      font-size:1.06rem;
+      line-height:1.9;
+      margin-bottom:24px;
+    }
+    .feature-list{
+      display:grid;
+      gap:14px;
+      margin-top:28px;
+    }
+    .feature{
+      padding:16px 18px;
+      border-radius:20px;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .feature strong{display:block;font-size:1rem;margin-bottom:6px}
+    .feature span{color:rgba(255,255,255,.7);line-height:1.7;font-size:.96rem}
+
+    .form-wrap{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding-top:42px;
+      background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.01));
+    }
+    .panel{
+      width:min(100%, 500px);
+      margin:0 auto;
+      background:linear-gradient(180deg, rgba(12,17,35,.72), rgba(8,12,24,.84));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:28px;
+      padding:28px;
+      box-shadow:0 20px 50px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .panel h2{
+      margin:0 0 10px;
+      font-size:1.6rem;
+      letter-spacing:2px;
+    }
+    .panel p{
+      margin:0 0 22px;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:.98rem;
+    }
+    .field-label{
+      display:block;
+      margin-bottom:10px;
+      font-size:.95rem;
+      color:rgba(255,255,255,.9);
+      letter-spacing:1px;
+    }
+    .input-wrap{position:relative}
+    input[type="text"]{
+      width:100%;
+      height:66px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background:linear-gradient(180deg, rgba(0,0,0,.34), rgba(18,24,44,.72));
+      color:#fff;
+      font-size:1.15rem;
+      padding:0 18px;
+      outline:none;
+      transition:.22s ease;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    input[type="text"]::placeholder{color:rgba(255,255,255,.36)}
+    input[type="text"]:focus{
+      border-color:rgba(102,228,255,.5);
+      box-shadow:0 0 0 4px rgba(102,228,255,.12), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .counter{
+      position:absolute;
+      top:50%;
+      right:16px;
+      transform:translateY(-50%);
+      font-size:.86rem;
+      color:rgba(255,255,255,.48);
+      pointer-events:none;
+    }
+    .helper{
+      margin-top:10px;
+      font-size:.9rem;
+      color:rgba(255,255,255,.64);
+      line-height:1.7;
+    }
+    .error{
+      margin-top:12px;
+      min-height:24px;
+      color:var(--danger);
+      font-size:.94rem;
+      font-weight:700;
+      letter-spacing:.5px;
+    }
+    .preview{
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      color:rgba(255,255,255,.82);
+    }
+    .preview strong{
+      display:inline-block;
+      margin-left:6px;
+      color:var(--gold);
+      letter-spacing:1px;
+    }
+    .actions{
+      display:flex;
+      gap:12px;
+      margin-top:22px;
+    }
+    button{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      height:62px;
+      border-radius:18px;
+      padding:0 20px;
+      font-size:1.06rem;
+      font-weight:900;
+      transition:.22s ease;
+    }
+    .start-btn{
+      flex:1;
+      color:#fff;
+      background:linear-gradient(135deg, rgba(0,194,255,.96), rgba(0,114,255,.96) 52%, rgba(154,120,255,.92));
+      box-shadow:0 12px 24px rgba(0,114,255,.24), inset 0 1px 0 rgba(255,255,255,.16);
+      letter-spacing:1px;
+    }
+    .start-btn:hover{transform:translateY(-1px) scale(1.01);filter:brightness(1.06)}
+    .start-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;filter:none}
+    .ghost-btn{
+      min-width:120px;
+      color:rgba(255,255,255,.92);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      border:1px solid rgba(255,255,255,.1);
+    }
+    .tips-grid{
+      margin-top:22px;
+      display:grid;
+      gap:10px;
+    }
+    .tip{
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.035);
+      border:1px solid rgba(255,255,255,.07);
+      color:rgba(255,255,255,.72);
+      font-size:.92rem;
+      line-height:1.65;
+    }
+    .tip.ok{color:rgba(125,255,179,.95)}
+    .tip.warn{color:rgba(255,215,109,.95)}
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:26px;
+      transform:translateX(-50%) translateY(20px);
+      min-width:min(92vw, 360px);
+      text-align:center;
+      padding:14px 18px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background:linear-gradient(180deg, rgba(10,14,29,.92), rgba(10,14,29,.84));
+      color:#fff;
+      box-shadow:var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition:.24s ease;
+      z-index:9;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 920px){
+      .shell{grid-template-columns:1fr; min-height:auto}
+      .hero{border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+      .hero,.form-wrap{padding:28px}
+      h1{font-size:clamp(2.5rem, 13vw, 4rem); letter-spacing:6px}
+    }
+    @media (max-width: 560px){
+      .scene{padding:14px}
+      .hero,.form-wrap{padding:20px}
+      .panel{padding:20px}
+      .actions{flex-direction:column}
+      .ghost-btn{width:100%}
+      input[type="text"], .start-btn, .ghost-btn{height:58px}
+    }
+  </style>
+</head>
+<body>
+  <main class="scene">
+    <section class="shell">
+      <div class="hero">
+        <div>
+          <div class="eyebrow">LIGHT × SHADOW</div>
+          <h1>光影對決</h1>
+          <div class="subtitle">
+            輸入你的名字，準備進入光影對決。
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-wrap">
+        <div class="panel">
+          <h2>輸入玩家名稱</h2>
+          <p>請先設定玩家名稱。</p>
+
+          <label class="field-label" for="playerName">玩家名字</label>
+          <div class="input-wrap">
+            <input id="playerName" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="請輸入你的名字（1～12 字）" />
+            <div class="counter"><span id="nameCount">0</span>/12</div>
+          </div>
+
+          <div class="helper">允許：中文、英文、數字、底線（_）、減號（-）</div>
+          <div id="errorText" class="error"></div>
+
+          <div class="preview">目前顯示名稱：<strong id="namePreview">未設定</strong></div>
+
+          <div class="actions">
+            <button id="startBtn" class="start-btn" type="button">點擊開始</button>
+            <button id="clearBtn" class="ghost-btn" type="button">清除</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const STORAGE_KEYS = {
+      playerName: 'gy_player_name',
+      playerEnteredAt: 'gy_player_entered_at',
+      audioUnlocked: 'gy_audio_unlocked'
+    };
+
+    const playerNameInput = document.getElementById('playerName');
+    const nameCount = document.getElementById('nameCount');
+    const namePreview = document.getElementById('namePreview');
+    const errorText = document.getElementById('errorText');
+    const startBtn = document.getElementById('startBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const toast = document.getElementById('toast');
+
+    const allowedPattern = /^[\u4e00-\u9fffA-Za-z0-9_-]+$/;
+
+    function sanitizeName(raw){
+      return (raw || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function validateName(raw){
+      const value = sanitizeName(raw);
+      if(!value) return { ok:false, message:'請先輸入名字' };
+      if(value.length < 1) return { ok:false, message:'名字至少要 1 個字' };
+      if(value.length > 12) return { ok:false, message:'名字最多 12 個字' };
+      if(!allowedPattern.test(value)) return { ok:false, message:'名字只能使用中英文字、數字、_、-' };
+      return { ok:true, value };
+    }
+
+    function updateCounter(){
+      nameCount.textContent = String(playerNameInput.value.length);
+    }
+
+    function updatePreview(){
+      const normalized = sanitizeName(playerNameInput.value);
+      namePreview.textContent = normalized || '未設定';
+    }
+
+    function setError(message=''){
+      errorText.textContent = message;
+    }
+
+    function showToast(message){
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(()=> toast.classList.remove('show'), 2200);
+    }
+
+    function savePlayerName(name){
+      localStorage.setItem(STORAGE_KEYS.playerName, name);
+      localStorage.setItem(STORAGE_KEYS.playerEnteredAt, String(Date.now()));
+    }
+
+    function markAudioUnlocked(){
+      localStorage.setItem(STORAGE_KEYS.audioUnlocked, '1');
+      // 之後你提供音樂檔時，可在這裡掛上 audio.play()。
+    }
+
+    function loadStoredName(){
+      const saved = localStorage.getItem(STORAGE_KEYS.playerName) || '';
+      if(saved){
+        playerNameInput.value = saved;
+      }
+      updateCounter();
+      updatePreview();
+    }
+
+    function goToMenu(){
+      // 目前先導向未來的菜單頁檔名。
+      window.location.href = 'menu.html';
+    }
+
+    function handleStart(){
+      const result = validateName(playerNameInput.value);
+      if(!result.ok){
+        setError(result.message);
+        playerNameInput.focus();
+        return;
+      }
+
+      setError('');
+      playerNameInput.value = result.value;
+      updateCounter();
+      updatePreview();
+      savePlayerName(result.value);
+      markAudioUnlocked();
+      showToast('名字已保存，準備進入菜單頁');
+
+      setTimeout(goToMenu, 350);
+    }
+
+    playerNameInput.addEventListener('input', () => {
+      updateCounter();
+      updatePreview();
+      if(errorText.textContent){
+        const result = validateName(playerNameInput.value);
+        if(result.ok) setError('');
+      }
+    });
+
+    playerNameInput.addEventListener('keydown', (event) => {
+      if(event.key === 'Enter'){
+        handleStart();
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      playerNameInput.value = '';
+      updateCounter();
+      updatePreview();
+      setError('');
+      playerNameInput.focus();
+    });
+
+    startBtn.addEventListener('click', handleStart);
+
+    loadStoredName();
+  </script>
+</body>
+</html>
